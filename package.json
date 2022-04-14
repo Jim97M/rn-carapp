@@ -4,6 +4,7 @@
   "description": "Car Management System",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "test"
   },
   "repository": {
@@ -21,12 +22,20 @@
   "homepage": "https://github.com/Jim97M/rn-carapp#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "express-validator": "^6.14.0",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.10",
     "mongoose-lean-virtuals": "^0.9.0",
-    "multer": "^1.4.4"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "nodemon": "^2.0.15",
+    "path": "^0.12.7",
+    "sharp": "^0.30.3",
+    "socket.io": "^4.4.1"
   }
 }
