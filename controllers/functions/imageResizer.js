@@ -24,8 +24,8 @@ exports.ResizeImage = async (path, images) => {
 } 
 
 
-exports.RemoveImages = async (images) => {
- await images.forEach((image) => {
+exports.RemoveImages = async (files) => {
+ await files.forEach((image) => {
      const filePath = "assets/" + image.filename;
      fs.unlinkSync(filePath);
  });
