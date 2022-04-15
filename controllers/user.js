@@ -5,7 +5,7 @@ const Remover = require('./functions/imageResizer');
 const JWT_SECRET = process.env.JWT_SECRET;
 const roomController = require('./room');
 
-exports.signup = async (req, res, next) => {
+exports.Signup = async (req, res, next) => {
     try {
         const errors = validationResult(req);
         if(errors.errors.length !=0){

@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express();
-const bodyparser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const compression = require('compression');
 const morgan = require('morgan');
 const SocketIO = require('socket.io');
 const roomController = require("./controllers/room");
+const userRoute = require('./routes/user');
 
 require("dotenv").config();
 require("./database/connect");
@@ -18,10 +18,9 @@ app.use(morgan('dev'));
 app.use(compression());
 app.use(express.json());
 
-const user = require("./routes/user");
 app.use('/assets', express.static('assets'));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use("/user", userRoute);
 app.get("/", async(req, res) => {
     res.send({"message": "Welcome"});
 });
