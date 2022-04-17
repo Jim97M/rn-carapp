@@ -1,9 +1,12 @@
 const User = require('../models/user');
-const Jwt = require('jsonwebtoken');
+const JWT = require('jsonwebtoken');
+require("dotenv").config();
 const {validationResult} = require('express-validator');
 const Remover = require('./functions/imageResizer');
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const roomController = require('./room');
+
+const authenticator = require("../middlewares/authenticator");
 
 exports.Signup = async (req, res, next) => {
     try {
@@ -41,11 +44,12 @@ exports.Signup = async (req, res, next) => {
 
 exports.Signin = async (req, res) => {
     try {
-        var user = await User.findOne({ email: req.query.email });
+        const euser = new User(req.body);
+        var user = await User.findOne({email: euser.email});
         if (!user) {
             res.status(401).json({ type: "failure", "result": "No User With Such Email Exists" });
         } else {
-            const isEqual = await User.isPasswordEqual(req.query.password, user.password);
+            const isEqual = await User.isPasswordEqual(euser.password, user.password);
             if (isEqual) {
                 const token = JWT.sign({ username: user.name }, JWT_SECRET_KEY);
                 // console.log(req.query.fcmToken);
