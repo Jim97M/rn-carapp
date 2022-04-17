@@ -1,6 +1,7 @@
+const fetch = require("node-fetch");
+
 const Car = require("../models/car");
 
-const fetch = require('node-fetch');
 
 exports.AddCars = async (req, res) => {
     try {
@@ -17,7 +18,8 @@ exports.AddCars = async (req, res) => {
         const cars = data["results"];
         cars.forEach(async (car) => {
             const c = new Car({ make: car["Make"], model: car["Model"] });
-            await c.save();
+            await c.save();const fetch = require("node-fetch");
+
         });
         // let c = new Car({ make: "", model: "" });
         // await c.save();

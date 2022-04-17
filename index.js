@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const SocketIO = require('socket.io');
 const roomController = require("./controllers/room");
 const userRoute = require('./routes/user');
+const carRoutes = require('./routes/car');
 
 require("dotenv").config();
 require("./database/connect");
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/assets', express.static('assets'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/user", userRoute);
+app.use("/car", carRoutes);
 app.get("/", async(req, res) => {
     res.send({"message": "Welcome"});
 });

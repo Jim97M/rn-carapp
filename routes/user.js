@@ -5,7 +5,7 @@ const authenticator = require("../middlewares/authenticator");
 
 
 router.post("/signup", userHandler.userHandler, userControllers.Signup);
-router.get("/signin", userControllers.Signin);
+router.post("/signin", userControllers.Signin);
 
 
 module.exports = router;

@@ -10,4 +10,4 @@ router.get("/addCars", carControllers.AddCars);
 router.get("/getMakes", carControllers.GetMakes);
 router.get("/getModelsByMake", carControllers.GetModelsByMake);
 
-exports.routes = router;
+module.exports = router;
