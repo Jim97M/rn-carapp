@@ -1,13 +1,10 @@
-const router = require('express').Router();
-const userHandler = require("../handlers/user");
-const userControllers = require("../controllers/user");
-const authenticator = require("../middlewares/authenticator");
+const express =require("express");
+const {register,login}=require("../controllers/user");
+
+const router=express.Router();
+
+router.post("/register",register);
+router.post("/login",login);
 
 
-router.post("/signup", userHandler.userHandler, userControllers.Signup);
-router.post("/signin", userControllers.Signin);
-
-
-module.exports = router;
-
-
+module.exports=router;

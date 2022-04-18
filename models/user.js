@@ -1,29 +1,74 @@
-const mongoose = require("mongoose");
+  
+const mongoose=require("mongoose");
+const bcrypt=require("bcryptjs");
+const jwt=require("jsonwebtoken");
+const crypto=require("crypto");
 
-const Schema = mongoose.Schema;
-const bcrypt = require("bcryptjs");
 
-const UserSchema = new Schema({
-    id: Schema.ObjectId,
-    email: {type: String, unique: true},
-    name: {type: String, trim: true, default: null},
-    phone: {type: String, trim: true, default: null},
-    image: {type: String, trim: true, default: null},
-    password: {type: String, required: true},
-    provider: {type: Object, default: null},
-    forgetKey: {type: String, required: true},
-    fcmToken: {type: String},
-    isAdmin: {type: Boolean, default: false}
-},
-   {timestamps: true}
-);
 
-UserSchema.statics.ConvertToHash = async(password) => {
-    return bcrypt.hashSync(password, 10);
-}
+const Schema=mongoose.Schema;
 
-UserSchema.statics.isPasswordEqual = async (password, passwordFromDatabase) => {
-    return bcrypt.compare(password, passwordFromDatabase);
+const UserSchema=new Schema({
+    email:{
+        type:String,
+        required: [true,"Please provide your email"],
+        unique:true,
+        match:[
+            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+            "Please provide  valid email"
+        ]
+    },
+    password:{
+        type:String,
+        minlength:[6,"Please provide a password with min length"],
+        required:[true,"Please provide a password"],
+        select:false
+    },
+    confirmPassword:{
+        type:String,
+        minlength:[6,"Please provide a password with min length"],
+        required:[true,"Please provide a password"],
+        select:false
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
+    },
+    resetPasswordToken:{
+        type:String
+    },
+    resetPasswordExpire:{
+        type:Date
+    }
+
+});
+
+UserSchema.methods.generateJwtFromUser=function(){
+    const {JWT_SECRET_KEY,JWT_EXPIRE}=process.env;
+    const payload={
+        id:this._id,
+        email:this.email
+    };
+
+    const token=jwt.sign(payload,JWT_SECRET_KEY,{
+        expiresIn:JWT_EXPIRE
+    });
+    return token
 };
 
-module.exports = mongoose.model("user", UserSchema);
+UserSchema.pre("save",function (next) {
+    if(!this.isModified("password")){
+        next();
+    }
+    bcrypt.genSalt(10,(err,salt)=>{
+        if (err) next(err);
+        bcrypt.hash(this.password,salt,(err,hash)=>{
+            if(err) next(err);
+            this.password=hash;
+            next();
+        });
+    });
+});
+
+
+module.exports=mongoose.model("User",UserSchema);
