@@ -1,52 +1,36 @@
-const fetch = require("node-fetch");
-
+const upload = require("../middlewares/ImagesMiddleware");
 const Car = require("../models/car");
+const asyncErrorWrapper = require("express-async-handler");
+const CustomError = require("../Error/CutomError");
+const fs = require("fs");
+const path = require("path");
 
+const uploadImage = asyncErrorWrapper(upload.single('image'), async (req, res, next) => {
+    var obj = {
+        name: req.body.name,
+        model: req.body.model,
+        color: req.body.color,
+        rate: req.body.rate,
+        address: req.body.address,
+        description: req.body.description,
+        image: {
+            data: fs.readFileSync(path.join(__dirname + '/assets' + req.file.filename)),
+            contentType: 'image/png'
+        },
+  
 
-exports.AddCars = async (req, res) => {
-    try {
-        const response = await fetch(
-            'https://parseapi.back4app.com/classes/Car_Model_List?limit=9581&keys=Make,Model',
-            {
-                headers: {
-                    'X-Parse-Application-Id': 'hlhoNKjOvEhqzcVAJ1lxjicJLZNVv36GdbboZj3Z',
-                    'X-Parse-Master-Key': 'SNMJJF0CZZhTPhLDIqGhTlUNV9r60M2Z5spyWfXW',
-                }
-            }
-        );
-        const data = await response.json();
-        const cars = data["results"];
-        cars.forEach(async (car) => {
-            const c = new Car({ make: car["Make"], model: car["Model"] });
-            await c.save();const fetch = require("node-fetch");
-
-        });
-        // let c = new Car({ make: "", model: "" });
-        // await c.save();
-        res.send("Added")
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ "type": "failure", "result": "Server Not Responding" });
     }
-}
+    
+    await Car.create(obj, (err, item) => {
+        if(err){
+            return next(new CustomError("Error", 401))
+        }else{
+            res.redirect('/');
+        }
+    })
+    
+  }
+    )
 
-exports.GetMakes = async (req, res) => {
-    try {
-        const cars = await Car.distinct('make');
-        res.status(200).json({ "type": "success", "result": ["unlisted", ...cars] });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ "type": "failure", "result": "Server Not Responding" });
-    }
-}
 
-exports.GetModelsByMake = async (req, res) => {
-    try {
-        const make = req.query.make;
-        const cars = await Car.distinct('model', { make: make });
-        res.status(200).json({ "type": "success", "result": ["unlisted", ...cars] });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ "type": "failure", "result": "Server Not Responding" });
-    }
-}
+module.exports={uploadImage};
