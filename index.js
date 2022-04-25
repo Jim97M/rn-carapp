@@ -5,7 +5,6 @@ const path = require("path");
 const compression = require('compression');
 const morgan = require('morgan');
 const SocketIO = require('socket.io');
-const roomController = require("./controllers/room");
 const userRoute = require('./routes/user');
 const carRoutes = require('./routes/car');
 
@@ -31,14 +30,6 @@ app.listen(port, host, () => {
     console.log("Server running at http://" + host + ":" + port);
 })
 
-const createGroup = async () => {
-    const response = await roomController.is_Group_Room_Already_Exist("global");
-    if (!response) {
-        await roomController.Create_Group_Room("global");
-    }
-}
-
-createGroup();
 
 // io = SocketI0(myServer);
 // socketConnect(io);

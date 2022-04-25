@@ -1,13 +1,29 @@
-const upload = require("../middlewares/ImagesMiddleware");
+//const upload = require("../middlewares/ImagesMiddleware");
 const Car = require("../models/car");
 const asyncErrorWrapper = require("express-async-handler");
 const CustomError = require("../Error/CutomError");
 const fs = require("fs");
 const path = require("path");
 
+const multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'assets/')
+    },
+    filename: function (req, file, cb) {
+        const filename = Date.now() + "-" + file.originalname;
+        cb(null, filename);
+    }
+});
+
+const upload = multer({
+    storage: storage
+});
+
 const uploadImage = asyncErrorWrapper(upload.single('image'), async (req, res, next) => {
     var obj = {
-        name: req.body.name,
+        brandname: req.body.name,
         model: req.body.model,
         color: req.body.color,
         rate: req.body.rate,
@@ -18,7 +34,6 @@ const uploadImage = asyncErrorWrapper(upload.single('image'), async (req, res, n
             contentType: 'image/png'
         },
   
-
     }
     
     await Car.create(obj, (err, item) => {

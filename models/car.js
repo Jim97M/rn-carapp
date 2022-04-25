@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const CarSchema =new Schema({
     id: Schema.ObjectId,
-    name: {type: String, required: true},
+    brandname: {type: String, required: true},
     model: {type: String, required: true},
     color: {type: String, required: true},
     rate: {type: Number, required: true},
