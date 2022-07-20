@@ -26,7 +26,7 @@ app.get("/", async(req, res) => {
     res.send({"message": "Welcome"});
 });
 
-app.listen(port, host, () => {
+app.listen(port, () => {
     console.log("Server running at http://" + host + ":" + port);
 })
 

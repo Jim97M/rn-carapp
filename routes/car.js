@@ -6,6 +6,6 @@ const carControllers = require("../controllers/car");
 
 const router = express.Router();
 
-router.post("/carpost", carControllers.uploadImage );
+router.post("/carpost", carControllers.uploadCar);
 
 module.exports = router;

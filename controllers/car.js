@@ -29,10 +29,10 @@ const uploadImage = asyncErrorWrapper(upload.single('image'), async (req, res, n
         rate: req.body.rate,
         address: req.body.address,
         description: req.body.description,
-        image: {
-            data: fs.readFileSync(path.join(__dirname + '/assets' + req.file.filename)),
-            contentType: 'image/png'
-        },
+        // image: {
+        //     data: fs.readFileSync(path.join(__dirname + '/assets' + req.file.filename)),
+        //     contentType: 'image/png'
+        // },
   
     }
     
@@ -48,4 +48,28 @@ const uploadImage = asyncErrorWrapper(upload.single('image'), async (req, res, n
     )
 
 
-module.exports={uploadImage};
+const uploadCar = async (req, res, next) => {
+
+    const {brandname, model, color, rate, address, description} = req.body;
+    try {
+        const car = Car.create({
+            brandname,
+            model,
+            color,
+            rate,
+            address,
+            description
+        })
+
+        return res.status(200).json({
+            success: True,
+            data: {
+                model: car.model
+            }
+        })
+    } catch (error) {
+       res.status(400).send("Client Client Error");
+    }
+}
+
+module.exports={uploadImage, uploadCar};
