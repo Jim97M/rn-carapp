@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const SocketIO = require('socket.io');
 const userRoute = require('./routes/user');
 const carRoutes = require('./routes/car');
-
+const imageRoutes = require('./routes/image');
 require("dotenv").config();
 require("./database/connect");
 app.use(cors());
@@ -22,9 +22,12 @@ app.use('/assets', express.static('assets'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/user", userRoute);
 app.use("/car", carRoutes);
+app.use("/image", imageRoutes);
 app.get("/", async(req, res) => {
     res.send({"message": "Welcome"});
 });
+
+
 
 app.listen(port, () => {
     console.log("Server running at http://" + host + ":" + port);

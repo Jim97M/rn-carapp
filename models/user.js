@@ -33,28 +33,22 @@ const UserSchema=new Schema({
     createdAt:{
         type:Date,
         default:Date.now
-    },
-    resetPasswordToken:{
-        type:String
-    },
-    resetPasswordExpire:{
-        type:Date
     }
 
 });
 
-UserSchema.methods.generateJwtFromUser=function(){
-    const {JWT_SECRET_KEY,JWT_EXPIRE}=process.env;
-    const payload={
-        id:this._id,
-        email:this.email
-    };
+// UserSchema.methods.generateJwtFromUser=function(){
+//     const {JWT_SECRET_KEY,JWT_EXPIRE}=process.env;
+//     const payload={
+//         id:this._id,
+//         email:this.email
+//     };
 
-    const token=jwt.sign(payload,JWT_SECRET_KEY,{
-        expiresIn:JWT_EXPIRE
-    });
-    return token
-};
+//     const token=jwt.sign(payload,JWT_SECRET_KEY,{
+//         expiresIn:JWT_EXPIRE
+//     });
+//     return token
+// };
 
 UserSchema.pre("save",function (next) {
     if(!this.isModified("password")){
