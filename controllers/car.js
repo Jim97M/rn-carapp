@@ -72,4 +72,14 @@ const uploadCar = async (req, res, next) => {
     }
 }
 
-module.exports={uploadImage, uploadCar};
+
+const getCar = async (req, res, next) => {
+    const {brandname, model, color, rate, address, description} = req.body;
+    try{
+        const car = await Car.find()
+        res.status(200).json(car);
+    }catch(err){
+       res.status(500).json(err);
+    }
+}
+module.exports={uploadImage, uploadCar, getCar};

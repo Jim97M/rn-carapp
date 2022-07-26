@@ -15,11 +15,9 @@ const register=asyncErrorWrapper(async (req,res,next)=>{
             email,password,confirmPassword
         });
 
-        const token=user.generateJwtFromUser();
         return res.status(200)
             .json({
                 success:true,
-                access_token:token,
                 data:{
                     email:user.email,
                     id:user._id
@@ -41,11 +39,9 @@ const login=asyncErrorWrapper(async (req,res,next)=>{
         return next(new CustomError("Email Incorrect",400));
     }
 
-    const token=user.generateJwtFromUser();
     return res.status(200)
         .json({
             success:true,
-            access_token:token,
             data:{
                 email:user.email,
                 id:user._id
