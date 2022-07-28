@@ -35,4 +35,9 @@ router.post('/upload', (req, res) => {
     })
 })
 
+router.get('/getimage', async (req, res) => {
+   const allData = await ImageModel.find();
+   res.json(allData)
+})
+
 module.exports = router;
