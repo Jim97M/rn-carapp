@@ -86,4 +86,4 @@ router.get('/success', (req, res) => {
 
 router.get('/cancel', (req, res) => res.sed('Cancelled'));
 
-export default router;
+module.exports = router;

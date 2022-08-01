@@ -8,9 +8,11 @@ const ImageSchema = new Schema({
         required: true
     },
 
-    image: {
-        data: Buffer,
-        contentType: String
+    img: {
+       type: String,
+    },
+    cloudinary_id:{
+        type: String,
     }
 })
 
