@@ -2,9 +2,8 @@
 const Car = require("../models/car");
 const asyncErrorWrapper = require("express-async-handler");
 const CustomError = require("../Error/CutomError");
-const fs = require("fs");
-const path = require("path");
-
+const upload = require('../utils/multer');
+const cloudinary = require('../utils/cloudinary');
 const multer = require('multer');
 
 var storage = multer.diskStorage({
@@ -21,44 +20,22 @@ const upload = multer({
     storage: storage
 });
 
-const uploadImage = asyncErrorWrapper(upload.single('image'), async (req, res, next) => {
-    var obj = {
-        brandname: req.body.name,
-        model: req.body.model,
-        color: req.body.color,
-        rate: req.body.rate,
-        address: req.body.address,
-        description: req.body.description,
-        // image: {
-        //     data: fs.readFileSync(path.join(__dirname + '/assets' + req.file.filename)),
-        //     contentType: 'image/png'
-        // },
-  
-    }
-    
-    await Car.create(obj, (err, item) => {
-        if(err){
-            return next(new CustomError("Error", 401))
-        }else{
-            res.redirect('/');
-        }
-    })
-    
-  }
-    )
 
+const uploadCar =( upload.single('image'), async (req, res, next) => {
 
-const uploadCar = async (req, res, next) => {
-
-    const {brandname, model, color, rate, address, description} = req.body;
+    const {name, model, image, price, location, cloudinary_id} = req.body;
     try {
+  
+        //Upload Image
+        const result = await cloudinary.uploader.upload(req.file.path);
+
         const car = Car.create({
-            brandname,
+            name,
             model,
-            color,
-            rate,
-            address,
-            description
+            image,
+            price,
+            location,
+            cloudinary_id
         })
 
         return res.status(200).json({
@@ -70,11 +47,11 @@ const uploadCar = async (req, res, next) => {
     } catch (error) {
        res.status(400).send("Client Client Error");
     }
-}
+});
 
 
 const getCar = async (req, res, next) => {
-    const {brandname, model, color, rate, address, description} = req.body;
+    const {name, model, price, image, location, cloudinary_id} = req.body;
     try{
         const car = await Car.find()
         res.status(200).json(car);
