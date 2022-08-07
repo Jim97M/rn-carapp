@@ -1,7 +1,6 @@
 const express = require("express");
 
 const carControllers = require("../controllers/car");
-const { findById } = require("../models/car");
 
 // const authenticator = require("../middlewares/authenticator");
 

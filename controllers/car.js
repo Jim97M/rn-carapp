@@ -21,32 +21,33 @@ const multer = require('multer');
 // });
 
 
-const uploadCar =( upload.single('image'), async (req, res) => {
+const uploadCar = async (req, res) => {
 
     try {
-  
-        //Upload Image
-        const result = await cloudinary.uploader.upload(req.file.path);
-
-        const car = new Car({
-            name: req.body.name,
-            model: req.body.model,
-            image: result.secure_url,
-            price: req.body.price,
-            location: req.body.location,
-            cloudinary_id: result.public_id
+    const {name, model, price, location, description} = req.body;
+        const car = await Car.create({
+            name,
+            model,
+            price,
+            location,
+            description
         });
 
-        await car.save();
-
         return res.status(200).json({
-           car  
+          success: true,
+          data: {
+            car: car.name,
+            car: car.model,
+            car: car.price, 
+            car: car.location,
+            car: car.description
+          }
         })
-        console.log(car);
+    
     } catch (error) {
        res.status(400).send("Client Client Error");
     }
-});
+};
 
 const getCar = async (req, res, next) => {
     const {name, model, price, image, location, cloudinary_id} = req.body;
