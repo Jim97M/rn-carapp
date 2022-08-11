@@ -8,6 +8,7 @@ const SocketIO = require('socket.io');
 const userRoute = require('./routes/user');
 const carRoutes = require('./routes/car');
 const payRoutes = require('./routes/paypal');
+const imageRoute = require('./routes/image');
 require("dotenv").config();
 require("./database/connect");
 app.use(cors());
@@ -19,20 +20,19 @@ app.use(compression());
 app.use(express.json());
 
 app.use('/assets', express.static('assets'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 app.use("/user", userRoute);
 app.use("/car", carRoutes);
 app.use("/pay", payRoutes);
+app.use("/image", imageRoute.routes);
 
 app.get("/", async(req, res) => {
     res.send({"message": "Welcome"});
 });
 
-
 app.listen(port, () => {
     console.log("Server running at http://" + host + ":" + port);
-})
-
+});
 
 // io = SocketI0(myServer);
 // socketConnect(io);
